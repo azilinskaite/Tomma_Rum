@@ -43,15 +43,17 @@ function SingleProject() {
   useEffect(() => {
     setIsLoading(true)
 
+    let fetchedStickyPost = null
+
     getStickyPostByYear(year)
       .then((sticky) => {
         setStickyPost(sticky)
-
+        fetchedStickyPost = sticky
         return getArtProjectsByYear(year)
       })
       .then(({ data }) => {
-        const filtered = stickyPost
-          ? data.filter((post) => post.id !== stickyPost.id)
+        const filtered = fetchedStickyPost
+          ? data.filter((post) => post.id !== fetchedStickyPost.id)
           : data
         setPosts(filtered)
         setIsLoading(false)

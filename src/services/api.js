@@ -63,7 +63,7 @@ export async function getLatestNewsPosts(perPage = 3) {
 
 export async function getLatestStickyPost() {
   const response = await fetch(
-    "https://tommarum.se/wp-json/wp/v2/posts?sticky=true&per_page=1&_embed"
+    `${BASE_URL}/posts?sticky=true&per_page=1&_embed`
   )
   if (!response.ok) throw new Error("Failed to fetch sticky post")
   const posts = await response.json()
@@ -72,10 +72,9 @@ export async function getLatestStickyPost() {
 
 export async function getStickyPostByYear(year) {
   const response = await fetch(
-    `https://tommarum.se/wp-json/wp/v2/posts?sticky=true&year=${year}&_embed`
+    `${BASE_URL}/posts?sticky=true&after=${year}-01-01T00:00:00&before=${year}-12-31T23:59:59&_embed`
   )
   if (!response.ok) throw new Error("Failed to fetch sticky post")
   const posts = await response.json()
-  return posts[0] || null
+  return posts.length > 0 ? posts[0] : null
 }
-
