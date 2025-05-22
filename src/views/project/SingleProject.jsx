@@ -65,7 +65,7 @@ function SingleProject() {
   }, [year])
 
   return (
-    <section className="p-4 md:p-16 min-h-[70vh]">
+    <section className="p-4 mt-12 md:p-16 min-h-[70vh]">
       {isLoading ? (
         <div>
           <div className="h-20 w-2xl bg-gray-200 animate-pulse mb-8 rounded"></div>

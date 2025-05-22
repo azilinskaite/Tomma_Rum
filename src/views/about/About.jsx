@@ -2,7 +2,7 @@ import React from "react"
 
 function About() {
   return (
-    <main className="p-[20px] sm:px-[40px] sm:pr-[5%]">
+    <main className="mt-24 p-[20px] sm:px-[40px] sm:pr-[5%]">
       <h1 className="text-5xl mb-[15px] h-min sm:text-6xl sm:mb-[20px]">
         Vad är tomma rum?
       </h1>
