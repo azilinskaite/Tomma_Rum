@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { useParams } from "react-router-dom"
-import { getArtProjectsByYear } from "../../services/api"
+import { getArtProjectsByYear, getStickyPostByYear } from "../../services/api"
 import BlogPost from "./BlogPost"
 import he from "he"
 
@@ -36,14 +36,24 @@ const extractAllImages = (html) => {
 
 function SingleProject() {
   const { year } = useParams()
+  const [stickyPost, setStickyPost] = useState(null)
   const [posts, setPosts] = useState([])
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     setIsLoading(true)
-    getArtProjectsByYear(year)
+
+    getStickyPostByYear(year)
+      .then((sticky) => {
+        setStickyPost(sticky)
+
+        return getArtProjectsByYear(year)
+      })
       .then(({ data }) => {
-        setPosts(data)
+        const filtered = stickyPost
+          ? data.filter((post) => post.id !== stickyPost.id)
+          : data
+        setPosts(filtered)
         setIsLoading(false)
       })
       .catch((error) => {
@@ -64,6 +74,17 @@ function SingleProject() {
       ) : (
         <>
           <h2 className="text-7xl mb-6">{year}</h2>
+          {stickyPost && (
+            <div className="sticky-post-container mb-12">
+              <BlogPost
+                key={stickyPost.id}
+                date={stickyPost.date}
+                title={he.decode(stickyPost.title?.rendered)}
+                paragraphs={extractParagraphText(stickyPost.content?.rendered)}
+                imageUrls={extractAllImages(stickyPost.content?.rendered)}
+              />
+            </div>
+          )}
           {posts.map((post) => (
             <BlogPost
               key={post.id}
